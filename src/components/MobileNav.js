@@ -2,12 +2,6 @@ import React, { Fragment, useState } from "react";
 import { NavLink } from "react-router-dom";
 import { AiOutlineClose, AiOutlineMenu } from "react-icons/ai";
 import { BsChevronDown } from "react-icons/bs";
-import { MdDashboard } from "react-icons/md";
-import { GiBookmark } from "react-icons/gi";
-import { FaBusinessTime } from "react-icons/fa";
-import { FcManager } from "react-icons/fc";
-import { IoMdSchool } from "react-icons/io";
-import { SiFormstack } from "react-icons/si";
 import {
   Menu,
   MenuItems,
@@ -30,57 +24,40 @@ const MobileNavigation = () => {
 
   const Menus = [
     {
-      title: "Dashboard",
-      icon: <MdDashboard />,
-      path: "/dashboard",
-    },
-    {
-      title: "User Management",
-      icon: <FaBusinessTime />,
+      title: "Initial Options",
       submenu: true,
       submenuItems: [
-        { title: "New Vendor (0)", path: "/newVendors" },
-        { title: "All Vendors", path: "/allVendors" },
-        { title: "Customers", path: "/businessProcesses/staff" },
+        { title: "Home", path: "/" },
+        { title: "Study", path: "/study" },
+        { title: "Life Coach", path: "/lifeCoach" },
+        { title: "Personal Trainer", path: "/personalTrainer" },
+        { title: "Advanced", path: "/advanced" },
       ],
     },
     {
-      title: "Product Management",
-      icon: <SiFormstack />,
+      title: "Advanced",
       submenu: true,
       submenuItems: [
-        { title: "Categories", path: "/forms/categories" },
-        { title: "All Products", path: "/forms/all-products" },
-        { title: "Draft Products", path: "/forms/draft-products" },
-        { title: "Low and Out of Stock", path: "/forms/low-out-of-stock" },
-        { title: "Inventory", path: "/forms/inventory" },
+        { title: "Collections", path: "/collections" },
+        { title: "Sources", path: "/sources" },
+        { title: "Tables", path: "/tables" },
       ],
     },
     {
-      title: "Order Management",
-      icon: <IoMdSchool />,
+      title: "Collections",
       submenu: true,
       submenuItems: [
-        { title: "Orders", path: "/premiumKnowledgeExchange/orders" },
-        { title: "Transaction", path: "/premiumKnowledgeExchange/transaction" },
+        { title: "Item 1", path: "/item1" },
+        { title: "Item 2", path: "/item2" },
       ],
     },
-    {
-      title: "Analytics",
-      icon: <GiBookmark />,
-      path: "/policies",
-    },
-    { title: "Settings", path: "/manager", icon: <FcManager /> },
   ];
 
   const activeLink =
-    "mx-4 flex justify-start items-center text-white text-xl space-x-1 font-primarySemibold bg-green-500 rounded-xl";
-
-  const activeSubLink =
-    "mx-4 flex justify-start items-center text-[#359E52] text-sm space-x-1 font-primarySemibold rounded-xl";
+    "mx-4 flex justify-start items-center space-x-1 bg-black text-white font-semibold";
 
   const normalLink =
-    "hover:bg-emerald-500 mt-3 mx-4 flex justify-start items-center space-x-1 font-primaryRegular";
+    "mt-2 mx-3 flex justify-start items-center space-x-1 text-xl font-bold";
 
   const SidebarLinks = ({ menu, index }) => {
     return (
@@ -127,7 +104,7 @@ const MobileNavigation = () => {
                 key={subIndex}
                 to={submenuItem.path}
                 className={({ isActive }) =>
-                  isActive ? activeSubLink : normalLink
+                  isActive ? activeLink : normalLink
                 }
               >
                 <li className="flex items-center gap-x-2 cursor-pointer p-2 hover:text-[#359E52] hover:font-primaryRegular rounded-md">

@@ -1,9 +1,14 @@
 import React, { useState } from "react";
 import { NavLink } from "react-router-dom";
 import MobileNavigation from "./MobileNav";
+import { BsChevronDown } from "react-icons/bs";
 
 const Layout = ({ children }) => {
   const [submenuOpen, setSubmenuOpen] = useState({});
+
+  const toggleSubmenu = (index) => {
+    setSubmenuOpen((prev) => ({ ...prev, [index]: !prev[index] }));
+  };
 
   const Menus = [
     {
@@ -45,9 +50,43 @@ const Layout = ({ children }) => {
   const SidebarLinks = ({ menu, index }) => {
     return (
       <>
-        <div className={normalLink}>{menu.title}</div>
-        {menu.submenu && (
-          <ul className="ml-2">
+        {menu.submenu ? (
+          <div className={normalLink} onClick={() => toggleSubmenu(index)}>
+            <li
+              className={`flex items-center gap-x-2 cursor-pointer p-3 rounded-md mt-2 ${
+                menu.spacing ? "mt-10" : "mt-0"
+              }`}
+            >
+              <span className="text-xl block float-left">{menu.icon}</span>
+              <span className="text-sm font-medium duration-200">
+                {menu.title}
+              </span>
+              <BsChevronDown
+                className={`ml-auto transition-transform ${
+                  submenuOpen[index] && "rotate-180"
+                }`}
+              />
+            </li>
+          </div>
+        ) : (
+          <NavLink
+            to={menu.path}
+            className={({ isActive }) => (isActive ? activeLink : normalLink)}
+          >
+            <li
+              className={`flex items-center gap-x-2 cursor-pointer p-3 rounded-md mt-2 ${
+                menu.spacing ? "mt-10" : "mt-0"
+              }`}
+            >
+              <span className="text-xl block float-left">{menu.icon}</span>
+              <span className="text-sm font-medium duration-200">
+                {menu.title}
+              </span>
+            </li>
+          </NavLink>
+        )}
+        {menu.submenu && submenuOpen[index] && (
+          <ul className="ml-6">
             {menu.submenuItems.map((submenuItem, subIndex) => (
               <NavLink
                 key={subIndex}
@@ -71,14 +110,13 @@ const Layout = ({ children }) => {
 
   return (
     <div className="flex min-h-screen flex-col bg-gray-100 transition-colors duration-150">
-      {/* <Navbar /> */}
       <MobileNavigation />
       <div className="flex flex-1">
         {/* Sidebar */}
         <div
           className={`hidden md:block h-screen bg-[#ffffff] duration-300 relative`}
         >
-          <div className="w-[270px] h-full overflow-x-scroll">
+          <div className="sidebar-scrollbar h-full w-full overflow-x-hidden">
             <ul>
               {Menus.map((menu, index) => (
                 <SidebarLinks key={index} menu={menu} index={index} />
