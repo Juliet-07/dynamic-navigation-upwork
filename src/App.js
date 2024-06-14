@@ -1,35 +1,47 @@
-import { Route, Routes } from "react-router-dom";
-import Layout from "./components/Layout";
-import Home from "./pages/initialOptions/Home";
-import Study from "./pages/initialOptions/Study";
-import LifeCoach from "./pages/initialOptions/LifeCoach";
-import PersonalTrainer from "./pages/initialOptions/PersonalTrainer";
-import Advanced from "./pages/initialOptions/Advanced";
-import Collections from "./pages/Advanced/Collections";
-import Sources from "./pages/Advanced/Sources";
-import Tables from "./pages/Advanced/Tables";
-import ItemOne from "./pages/Collections/ItemOne";
-import ItemTwo from "./pages/Collections/ItemTwo";
+import React, { useState, useEffect } from "react";
+import LeftNavBar from "./components/Sidebar";
+import MainContent from "./components/Content";
+import "./styles.css";
 
-function App() {
+const App = () => {
+  const [navItems, setNavItems] = useState([]);
+  const [selectedModule, setSelectedModule] = useState(null);
+  const [moduleContent, setModuleContent] = useState(null);
+
+  useEffect(() => {
+    // Fetch initial navigation items (base-level module)
+    fetchNavItems("Navigation");
+  }, []);
+
+  const fetchNavItems = async (moduleName) => {
+    try {
+      // API end point can be added here
+      const module = await import(`./modules/${moduleName}`);
+      if (module && module.default && module.default.navItems) {
+        const updatedNavItems = [...navItems, ...module.default.navItems];
+        setNavItems(updatedNavItems);
+        setModuleContent(module.default.content);
+      }
+    } catch (error) {
+      console.error("Error loading module:", error);
+    }
+  };
+
+  const handleNavItemClick = (item) => {
+    fetchNavItems(item.moduleName);
+    setSelectedModule(item.moduleName);
+  };
+
   return (
-    <>
-      <Layout>
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/study" element={<Study />} />
-          <Route path="/lifeCoach" element={<LifeCoach />} />
-          <Route path="/personalTrainer" element={<PersonalTrainer />} />
-          <Route path="/advanced" element={<Advanced />} />
-          <Route path="/collections" element={<Collections />} />
-          <Route path="/sources" element={<Sources />} />
-          <Route path="/tables" element={<Tables />} />
-          <Route path="/item1" element={<ItemOne />} />
-          <Route path="/item2" element={<ItemTwo />} />
-        </Routes>
-      </Layout>
-    </>
+    <div className="app-container">
+      <LeftNavBar
+        navItems={navItems}
+        onNavItemClick={handleNavItemClick}
+        selectedModule={selectedModule}
+      />
+      <MainContent content={moduleContent} />
+    </div>
   );
-}
+};
 
 export default App;
